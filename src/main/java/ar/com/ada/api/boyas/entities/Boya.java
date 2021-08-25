@@ -3,6 +3,8 @@ package ar.com.ada.api.boyas.entities;
 import java.util.*;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name="boya")
 public class Boya {
@@ -21,6 +23,7 @@ public class Boya {
     @Column(name="latitud_instalacion")
     private double latitudInstalacion;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "boya", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Muestra> muestras = new ArrayList<>();
 

@@ -1,9 +1,13 @@
 package ar.com.ada.api.boyas.services;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ar.com.ada.api.boyas.entities.Boya;
+import ar.com.ada.api.boyas.models.response.BoyaSinMuestra;
 import ar.com.ada.api.boyas.repos.BoyaRepository;
 
 @Service
@@ -17,6 +21,14 @@ public class BoyaService {
         boya.setLatitudInstalacion(latitudInstalacion);
 
         repo.save(boya);
+    }
+
+    public List<Boya> obtenerBoyas() {
+        return repo.findAll();
+    }
+
+    public Boya buscarBoya(Integer boyaId) {
+        return repo.findByboyaId(boyaId);
     }
     
 }

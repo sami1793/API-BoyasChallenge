@@ -7,5 +7,6 @@ import ar.com.ada.api.boyas.entities.Boya;
 
 @Repository
 public interface BoyaRepository extends JpaRepository<Boya, Integer>{
+    Boya findByboyaId(Integer id);
     
 }
