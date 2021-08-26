@@ -1,6 +1,7 @@
 package ar.com.ada.api.boyas.services;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,12 @@ public class MuestraService {
         Boya boya = boyaService.buscarBoya(boyaId);
         boya.setColorLuz("AZUL");
         boyaService.guardarBoya(boya);
+    }
+
+    public List<Muestra> traerMuestras(Integer idBoya) {
+        Boya boya = boyaService.buscarBoya(idBoya);
+        return boya.getMuestras();
+
     }
     
 }
