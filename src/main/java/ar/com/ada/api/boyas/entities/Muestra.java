@@ -44,6 +44,7 @@ public class Muestra {
 
     public void setBoya(Boya boya) {
         this.boya = boya;
+        this.boya.agregarMuestra(this);
     }
 
     public Date getHorarioMuestra() {

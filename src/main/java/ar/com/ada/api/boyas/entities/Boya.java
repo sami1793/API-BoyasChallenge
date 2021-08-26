@@ -69,7 +69,7 @@ public class Boya {
 
     public void agregarMuestra(Muestra muestra){
         this.muestras.add(muestra);
-        muestra.setBoya(this);//relacion BIDIRECCIONAL
+        //muestra.setBoya(this);//relacion BIDIRECCIONAL
     }
 
     
