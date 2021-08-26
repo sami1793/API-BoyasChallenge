@@ -30,5 +30,9 @@ public class BoyaService {
     public Boya buscarBoya(Integer boyaId) {
         return repo.findByboyaId(boyaId);
     }
+
+    public void guardarBoya(Boya boya){
+        repo.save(boya);
+    }
     
 }
