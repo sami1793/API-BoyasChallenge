@@ -31,5 +31,13 @@ public class MuestraService {
         //repo.save(muestra);
         boyaService.guardarBoya(boya);
     }
+
+    public void resetearColorBoyaMuestra(Integer muestraId) {
+        Muestra muestra = repo.findBymuestraId(muestraId);
+        Integer boyaId = muestra.getBoya().getBoyaId();
+        Boya boya = boyaService.buscarBoya(boyaId);
+        boya.setColorLuz("AZUL");
+        boyaService.guardarBoya(boya);
+    }
     
 }
