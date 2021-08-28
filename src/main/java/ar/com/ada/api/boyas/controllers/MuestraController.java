@@ -16,6 +16,7 @@ import ar.com.ada.api.boyas.entities.Muestra;
 import ar.com.ada.api.boyas.models.request.MuestraInfo;
 import ar.com.ada.api.boyas.models.response.GenericResponse;
 import ar.com.ada.api.boyas.models.response.MuestraColor;
+import ar.com.ada.api.boyas.models.response.MuestraMinimaResponse;
 import ar.com.ada.api.boyas.models.response.MuestraResponse;
 import ar.com.ada.api.boyas.services.MuestraService;
 
@@ -34,10 +35,10 @@ public class MuestraController {
         
         respuestaMuestra.id=muestraEntera.getMuestraId();//id de muestra
         
-        if(muestra.alturaNivelDelMar<-100 && muestra.alturaNivelDelMar>100 ){
+        if(muestra.alturaNivelDelMar<-100 || muestra.alturaNivelDelMar>100 ){
             respuestaMuestra.color="ROJO";
         }
-        if (muestra.alturaNivelDelMar<-50 && muestra.alturaNivelDelMar>50) {
+        if (muestra.alturaNivelDelMar<-50 || muestra.alturaNivelDelMar>50) {
             respuestaMuestra.color="AMARILLO";
         } 
         else {
@@ -71,6 +72,22 @@ public class MuestraController {
                 
         return ResponseEntity.ok(service.traerMuestrasPorColor(color));
     }
+
+    //que devuelva la muestra donde la altura nivel del mar sea la minima 
+    //para una boya en particular en formato JSON MuestraMinimaResponse
+    @GetMapping("api/muestras/minima/{idBoya}")
+    public ResponseEntity<MuestraMinimaResponse> muestraAlturaMinima(@PathVariable Integer idBoya){
+        Muestra muestraMinima= service.MuestraAlturaMinima(idBoya);
+        
+        MuestraMinimaResponse muestraMinimaResponse= new MuestraMinimaResponse();
+
+        muestraMinimaResponse.alturaNivelDelMarMinima=muestraMinima.getAlturaNivelMar();
+        muestraMinimaResponse.color=muestraMinima.getBoya().getColorLuz();
+        muestraMinimaResponse.horario=muestraMinima.getHorarioMuestra();
+
+        return ResponseEntity.ok(muestraMinimaResponse);
+    }
+
 
 
 }

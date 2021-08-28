@@ -52,10 +52,10 @@ public class MuestraService {
 
     public String colorMuestra(Muestra muestra){
                
-        if(muestra.getAlturaNivelMar()<-100 && muestra.getAlturaNivelMar()>100 ){
+        if(muestra.getAlturaNivelMar()<-100 || muestra.getAlturaNivelMar()>100 ){
             return "ROJO";
         }
-        if (muestra.getAlturaNivelMar()<-50 && muestra.getAlturaNivelMar()>50) {
+        if (muestra.getAlturaNivelMar()<-50 || muestra.getAlturaNivelMar()>50) {
             return "AMARILLO";
         } 
         else {
@@ -81,6 +81,20 @@ public class MuestraService {
         }
         return muestrasPorColor;
         
+    }
+
+    public Muestra MuestraAlturaMinima(Integer idBoya) {
+        Boya boya = boyaService.buscarBoya(idBoya);
+             
+        Muestra muestraMinima = boya.getMuestras().get(0);  
+
+        for (Muestra muestra : boya.getMuestras()) {
+            if(muestra.getAlturaNivelMar()<muestraMinima.getAlturaNivelMar()){
+                muestraMinima=muestra;
+            }
+            
+        }
+        return muestraMinima;
     }
     
 }
