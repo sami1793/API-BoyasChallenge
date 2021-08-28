@@ -87,6 +87,20 @@ public class Muestra {
         this.alturaNivelMar = alturaNivelMar;
     }
 
+
+    public String colorMuestra(Muestra muestra){
+               
+        if(muestra.getAlturaNivelMar()<-100 && muestra.getAlturaNivelMar()>100 ){
+            return "ROJO";
+        }
+        if (muestra.getAlturaNivelMar()<-50 && muestra.getAlturaNivelMar()>50) {
+            return "AMARILLO";
+        } 
+        else {
+            return "VERDE"; 
+        }
+    }
+
     
 
 }

@@ -1,5 +1,6 @@
 package ar.com.ada.api.boyas.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import ar.com.ada.api.boyas.entities.Boya;
 import ar.com.ada.api.boyas.entities.Muestra;
+import ar.com.ada.api.boyas.models.response.MuestraColor;
 import ar.com.ada.api.boyas.repos.MuestraRepository;
 
 @Service
@@ -18,7 +20,7 @@ public class MuestraService {
     @Autowired
     BoyaService boyaService;
 
-    public void registarMuestra(Integer boyaId, Date horario, String matricula, double latitud,
+    public Muestra registarMuestra(Integer boyaId, Date horario, String matricula, double latitud,
                                 double longitud, double alturaNivelMar) {
         Muestra muestra= new Muestra();
         Boya boya= boyaService.buscarBoya(boyaId);
@@ -31,6 +33,7 @@ public class MuestraService {
 
         //repo.save(muestra);
         boyaService.guardarBoya(boya);
+        return muestra;
     }
 
     public void resetearColorBoyaMuestra(Integer muestraId) {
@@ -45,6 +48,39 @@ public class MuestraService {
         Boya boya = boyaService.buscarBoya(idBoya);
         return boya.getMuestras();
 
+    }
+
+    public String colorMuestra(Muestra muestra){
+               
+        if(muestra.getAlturaNivelMar()<-100 && muestra.getAlturaNivelMar()>100 ){
+            return "ROJO";
+        }
+        if (muestra.getAlturaNivelMar()<-50 && muestra.getAlturaNivelMar()>50) {
+            return "AMARILLO";
+        } 
+        else {
+            return "VERDE"; 
+        }
+    }
+
+    public List<MuestraColor> traerMuestrasPorColor(String color) {
+        List<MuestraColor> muestrasPorColor = new ArrayList<>();
+        MuestraColor muestraPorColor= new MuestraColor();
+        
+        for (Muestra muestra : repo.findAll()) {            
+            
+            if (colorMuestra(muestra).equals(color)){ 
+                muestraPorColor.boyaId = muestra.getBoya().getBoyaId();
+                muestraPorColor.horario=muestra.getHorarioMuestra();
+                muestraPorColor.alturaNivelDelMar=muestra.getAlturaNivelMar();                            
+                
+                muestrasPorColor.add(muestraPorColor);
+                
+            }            
+
+        }
+        return muestrasPorColor;
+        
     }
     
 }

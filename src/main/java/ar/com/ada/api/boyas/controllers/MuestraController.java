@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ar.com.ada.api.boyas.entities.Muestra;
 import ar.com.ada.api.boyas.models.request.MuestraInfo;
 import ar.com.ada.api.boyas.models.response.GenericResponse;
+import ar.com.ada.api.boyas.models.response.MuestraColor;
+import ar.com.ada.api.boyas.models.response.MuestraResponse;
 import ar.com.ada.api.boyas.services.MuestraService;
 
 @RestController
@@ -23,17 +25,26 @@ public class MuestraController {
     MuestraService service;
 
     @PostMapping("api/muestras")
-    public ResponseEntity<GenericResponse> registrarMuestra(@RequestBody MuestraInfo muestra){
-        GenericResponse respuesta = new GenericResponse();
+    public ResponseEntity<MuestraResponse> registrarMuestra(@RequestBody MuestraInfo muestra){
+        MuestraResponse respuestaMuestra = new MuestraResponse();
 
-        service.registarMuestra(muestra.boyaId,muestra.horario, muestra.matricula, muestra.latitud,
+        Muestra muestraEntera = service.registarMuestra(muestra.boyaId,muestra.horario, muestra.matricula, muestra.latitud,
                                 muestra.longitud, muestra.alturaNivelDelMar);
 
         
-        respuesta.isOk=true;
-        respuesta.mensaje="muestra creada con éxito";
+        respuestaMuestra.id=muestraEntera.getMuestraId();//id de muestra
+        
+        if(muestra.alturaNivelDelMar<-100 && muestra.alturaNivelDelMar>100 ){
+            respuestaMuestra.color="ROJO";
+        }
+        if (muestra.alturaNivelDelMar<-50 && muestra.alturaNivelDelMar>50) {
+            respuestaMuestra.color="AMARILLO";
+        } 
+        else {
+            respuestaMuestra.color="VERDE"; 
+        }
 
-        return ResponseEntity.ok(respuesta);
+        return ResponseEntity.ok(respuestaMuestra);
     }
 
     //Reseteara el color de la luz de la boya a “AZUL” a partir de una muestra especifica
@@ -52,6 +63,13 @@ public class MuestraController {
     @GetMapping("api/muestras/boyas/{idBoya}")
     public ResponseEntity<List<Muestra>> traerMuestras(@PathVariable Integer idBoya){
         return ResponseEntity.ok(service.traerMuestras(idBoya));
+    }
+
+    //devuelve la lista de muestras de un color en el siguiente formato JSON MuestraColor:
+    @GetMapping("api/muestras/colores/{color}")
+    public ResponseEntity<List<MuestraColor>> traerMuestrasPorColor(@PathVariable String color){
+                
+        return ResponseEntity.ok(service.traerMuestrasPorColor(color));
     }
 
 
