@@ -38,7 +38,7 @@ public class MuestraController {
         if(muestra.alturaNivelDelMar<-100 || muestra.alturaNivelDelMar>100 ){
             respuestaMuestra.color="ROJO";
         }
-        if (muestra.alturaNivelDelMar<-50 || muestra.alturaNivelDelMar>50) {
+        else if (muestra.alturaNivelDelMar<-50 || muestra.alturaNivelDelMar>50) {
             respuestaMuestra.color="AMARILLO";
         } 
         else {

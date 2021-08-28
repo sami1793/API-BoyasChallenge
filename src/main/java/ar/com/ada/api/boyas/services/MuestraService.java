@@ -29,7 +29,7 @@ public class MuestraService {
         muestra.setMatriculaEmbaracion(matricula);
         muestra.setLatitud(latitud);
         muestra.setLongitud(longitud);
-        muestra.getAlturaNivelMar();
+        muestra.setAlturaNivelMar(alturaNivelMar);
 
         //repo.save(muestra);
         boyaService.guardarBoya(boya);
@@ -55,7 +55,7 @@ public class MuestraService {
         if(muestra.getAlturaNivelMar()<-100 || muestra.getAlturaNivelMar()>100 ){
             return "ROJO";
         }
-        if (muestra.getAlturaNivelMar()<-50 || muestra.getAlturaNivelMar()>50) {
+        else if (muestra.getAlturaNivelMar()<-50 || muestra.getAlturaNivelMar()>50) {
             return "AMARILLO";
         } 
         else {
