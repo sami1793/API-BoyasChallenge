@@ -49,7 +49,12 @@ public class MuestraService {
 
     public List<Muestra> traerMuestras(Integer idBoya) {
         Boya boya = boyaService.buscarBoya(idBoya);
-        return boya.getMuestras();
+        if (boya!=null){
+            return boya.getMuestras();
+        }
+        else 
+            return null;
+        
 
     }
 

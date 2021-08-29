@@ -56,8 +56,17 @@ public class MuestraController {
 
     //devuelve la lista de muestras de una boya, indicado por "idBoya"
     @GetMapping("api/muestras/boyas/{idBoya}")
-    public ResponseEntity<List<Muestra>> traerMuestras(@PathVariable Integer idBoya){
-        return ResponseEntity.ok(service.traerMuestras(idBoya));
+    public ResponseEntity<?> traerMuestras(@PathVariable Integer idBoya){
+        GenericResponse respuesta= new GenericResponse();
+        if(service.traerMuestras(idBoya)!=null){
+            return ResponseEntity.ok(service.traerMuestras(idBoya));
+        }
+        else{
+            respuesta.isOk=false;
+            respuesta.mensaje="No existe id ingresado";
+            return ResponseEntity.badRequest().body(respuesta);
+        }
+                    
     }
 
     //devuelve la lista de muestras de un color en el siguiente formato JSON MuestraColor:
