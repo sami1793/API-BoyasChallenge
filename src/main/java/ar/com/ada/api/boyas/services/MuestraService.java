@@ -1,6 +1,7 @@
 package ar.com.ada.api.boyas.services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -104,8 +105,36 @@ public class MuestraService {
         AnomaliaResponse anomaliaResponse= new AnomaliaResponse();
         Boya boya = boyaService.buscarBoya(idBoya);
         List<Muestra> muestras = boya.getMuestras();
+        Boolean flagKAIJU=false;
+        Date inicioKAIJU=muestras.get(0).getHorarioMuestra();//supongo que es la primera muestra
+        Date finKAIJU= new Date();//pongo cualquier cosa para inicializar
+
+        Calendar calendar= Calendar.getInstance();
         
-        for (int i=0; i< muestras.size()-1;i++){
+        
+        for (int i=0; i< muestras.size()-1;i++){            
+            
+            if ((Math.abs(muestras.get(i).getAlturaNivelMar())>=200)&&(Math.abs(muestras.get(i+1).getAlturaNivelMar())>=200)){
+                if(flagKAIJU==false){
+                    inicioKAIJU=muestras.get(i).getHorarioMuestra();
+                    calendar.setTime(inicioKAIJU);
+                    calendar.roll(Calendar.MINUTE, 10);
+                    finKAIJU=calendar.getTime();//fecha con 10 min mas
+                }
+                                
+                flagKAIJU=true;
+                if(muestras.get(i+1).getHorarioMuestra().compareTo(finKAIJU)>=0){
+                    anomaliaResponse.alturaNivelDelMar= muestras.get(muestras.size()-1).getAlturaNivelMar();//altura de ultima muestra
+                    anomaliaResponse.horarioInicioAnomalia=inicioKAIJU;
+                    anomaliaResponse.horarioInicioFinAnomalia=finKAIJU;
+                    anomaliaResponse.tipoAlerta=TipoAlertaEnum.KAIJU;
+                    return anomaliaResponse;
+                }
+
+            }
+            else
+            flagKAIJU=false;
+
             if(Math.abs(muestras.get(i).getAlturaNivelMar()-muestras.get(i+1).getAlturaNivelMar())>500){
                 anomaliaResponse.alturaNivelDelMar= muestras.get(muestras.size()-1).getAlturaNivelMar();//altura de ultima muestra
                 anomaliaResponse.horarioInicioAnomalia=muestras.get(i).getHorarioMuestra();
@@ -113,7 +142,7 @@ public class MuestraService {
                 anomaliaResponse.tipoAlerta=TipoAlertaEnum.IMPACTO;
 
                 return anomaliaResponse;
-            }            
+            }
         }
         return anomaliaResponse;        
     }
