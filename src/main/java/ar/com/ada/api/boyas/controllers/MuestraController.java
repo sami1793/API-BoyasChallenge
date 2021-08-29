@@ -46,12 +46,18 @@ public class MuestraController {
     @DeleteMapping("api/muestras/{id}")
     public ResponseEntity<GenericResponse> resetarColorBoyaMuestra(@PathVariable Integer id){
         GenericResponse respuesta = new GenericResponse();
-        service.resetearColorBoyaMuestra(id);
+        if(service.resetearColorBoyaMuestra(id)){//reseteo y a la vez devuelvo true o false
+            respuesta.isOk=true;
+            respuesta.mensaje="Color de boya resetado a azul con éxito";
 
-        respuesta.isOk=true;
-        respuesta.mensaje="Color dde boya resetado a azul con éxito";
-
-        return ResponseEntity.ok(respuesta);
+            return ResponseEntity.ok(respuesta);
+        }
+        else{
+            respuesta.isOk=false;
+            respuesta.mensaje="El id de muestra no existe";
+            return ResponseEntity.badRequest().body(respuesta);
+        }    
+                
     }
 
     //devuelve la lista de muestras de una boya, indicado por "idBoya"
