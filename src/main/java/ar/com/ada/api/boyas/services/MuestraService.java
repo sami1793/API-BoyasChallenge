@@ -39,12 +39,20 @@ public class MuestraService {
         return muestra;
     }
 
-    public void resetearColorBoyaMuestra(Integer muestraId) {
+    public boolean resetearColorBoyaMuestra(Integer muestraId) {
         Muestra muestra = repo.findBymuestraId(muestraId);
-        Integer boyaId = muestra.getBoya().getBoyaId();
+        /*Integer boyaId = muestra.getBoya().getBoyaId();
         Boya boya = boyaService.buscarBoya(boyaId);
-        boya.setColorLuz("AZUL");
-        boyaService.guardarBoya(boya);
+        */
+        if(muestra!=null){
+            Boya boya= muestra.getBoya();
+            boya.setColorLuz("AZUL");
+            boyaService.guardarBoya(boya);
+            return true;
+        }
+        else
+            return false;
+        
     }
 
     public List<Muestra> traerMuestras(Integer idBoya) {
