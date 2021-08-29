@@ -24,6 +24,7 @@ public class BoyaController {
     @Autowired
     BoyaService service;
 
+    //Permite la creación de boyas
     @PostMapping("api/boyas")
     public ResponseEntity<GenericResponse> crearBoya(@RequestBody InfoCrearBoya infoboya){
         GenericResponse respuesta= new GenericResponse();
@@ -35,28 +36,36 @@ public class BoyaController {
         return ResponseEntity.ok(respuesta);
     }
 
+    //Devuelve las boyas SIN las muestras
     @GetMapping("api/boyas")
     public ResponseEntity<List<Boya>> obtenerTodasBoyas(){
         return ResponseEntity.ok(service.obtenerBoyas());
     }
 
-    @GetMapping("api/boyas/{id}")//devuelve la info de una boya en particular(SIN las muestras)
+    //Devuelve la info de una boya en particular(SIN las muestras)
+    @GetMapping("api/boyas/{id}")
     public ResponseEntity<Boya> buscarBoya(@PathVariable Integer id){
         Boya boya = service.buscarBoya(id);
         return ResponseEntity.ok(boya);
     }
 
-    @PutMapping("api/boyas/{id}")//actualiza solo el color de la luz de la Boya
+    //Actualiza solo el color de la luz de la Boya
+    @PutMapping("api/boyas/{id}")
     public ResponseEntity<GenericResponse> actualizarColorBoya(@PathVariable Integer id, @RequestBody ColorBoyaInfo colorInfo ){
         GenericResponse respuesta= new GenericResponse();
-        Boya boya = service.buscarBoya(id);
-        boya.setColorLuz(colorInfo.color);
-        service.guardarBoya(boya);
         
+        if(service.actualizarColorBoya(id, colorInfo.color)){
+            respuesta.isOk=true;
+            respuesta.mensaje="Color boya actualizada con éxito";
 
-        respuesta.isOk=true;
-        respuesta.mensaje="Color boya actualizada con éxito";
+            return ResponseEntity.ok(respuesta);
+        }
+        else{
+            respuesta.isOk=false;
+            respuesta.mensaje="El id ingresado no existe";
+            return ResponseEntity.badRequest().body(respuesta);
+        }
 
-        return ResponseEntity.ok(respuesta);
+        
     }
 }

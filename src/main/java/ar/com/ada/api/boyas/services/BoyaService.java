@@ -34,5 +34,15 @@ public class BoyaService {
     public void guardarBoya(Boya boya){
         repo.save(boya);
     }
+
+    public boolean actualizarColorBoya(Integer boyaId, String colorLuz){
+        Boya boya= buscarBoya(boyaId);
+        if(boya!=null){
+            boya.setColorLuz(colorLuz);
+            guardarBoya(boya);
+            return true;
+        }
+        return false;
+    }
     
 }
