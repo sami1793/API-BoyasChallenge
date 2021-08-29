@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.ada.api.boyas.entities.Muestra;
 import ar.com.ada.api.boyas.models.request.MuestraInfo;
+import ar.com.ada.api.boyas.models.response.AnomaliaResponse;
 import ar.com.ada.api.boyas.models.response.GenericResponse;
 import ar.com.ada.api.boyas.models.response.MuestraColor;
 import ar.com.ada.api.boyas.models.response.MuestraMinimaResponse;
@@ -88,6 +89,12 @@ public class MuestraController {
         return ResponseEntity.ok(muestraMinimaResponse);
     }
 
+
+    @GetMapping("api/muestras/anomalias/{idBoya}")
+    public ResponseEntity<AnomaliaResponse> obtenerAnomalia(@PathVariable Integer idBoya){
+        
+        return ResponseEntity.ok(service.alertaImpacto(idBoya));
+    }
 
 
 }

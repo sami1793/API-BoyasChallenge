@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import ar.com.ada.api.boyas.entities.Boya;
 import ar.com.ada.api.boyas.entities.Muestra;
+import ar.com.ada.api.boyas.models.response.AnomaliaResponse;
 import ar.com.ada.api.boyas.models.response.MuestraColor;
+import ar.com.ada.api.boyas.models.response.AnomaliaResponse.TipoAlertaEnum;
 import ar.com.ada.api.boyas.repos.MuestraRepository;
 
 @Service
@@ -97,4 +99,22 @@ public class MuestraService {
         return muestraMinima;
     }
     
+
+    public AnomaliaResponse alertaImpacto(Integer idBoya){
+        AnomaliaResponse anomaliaResponse= new AnomaliaResponse();
+        Boya boya = boyaService.buscarBoya(idBoya);
+        List<Muestra> muestras = boya.getMuestras();
+        
+        for (int i=0; i< muestras.size()-1;i++){
+            if(Math.abs(muestras.get(i).getAlturaNivelMar()-muestras.get(i+1).getAlturaNivelMar())>500){
+                anomaliaResponse.alturaNivelDelMar= muestras.get(muestras.size()-1).getAlturaNivelMar();//altura de ultima muestra
+                anomaliaResponse.horarioInicioAnomalia=muestras.get(i).getHorarioMuestra();
+                anomaliaResponse.horarioInicioFinAnomalia=muestras.get(i+1).getHorarioMuestra();
+                anomaliaResponse.tipoAlerta=TipoAlertaEnum.IMPACTO;
+
+                return anomaliaResponse;
+            }            
+        }
+        return anomaliaResponse;        
+    }
 }
