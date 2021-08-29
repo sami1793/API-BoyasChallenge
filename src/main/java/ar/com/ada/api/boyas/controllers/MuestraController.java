@@ -26,6 +26,7 @@ public class MuestraController {
     @Autowired
     MuestraService service;
 
+    //Registra una muestra
     @PostMapping("api/muestras")
     public ResponseEntity<MuestraResponse> registrarMuestra(@RequestBody MuestraInfo muestra){
         MuestraResponse respuestaMuestra = new MuestraResponse();
@@ -36,15 +37,7 @@ public class MuestraController {
         
         respuestaMuestra.id=muestraEntera.getMuestraId();//id de muestra
         
-        if(muestra.alturaNivelDelMar<-100 || muestra.alturaNivelDelMar>100 ){
-            respuestaMuestra.color="ROJO";
-        }
-        else if (muestra.alturaNivelDelMar<-50 || muestra.alturaNivelDelMar>50) {
-            respuestaMuestra.color="AMARILLO";
-        } 
-        else {
-            respuestaMuestra.color="VERDE"; 
-        }
+        respuestaMuestra.color=service.colorMuestra(muestraEntera);
 
         return ResponseEntity.ok(respuestaMuestra);
     }
