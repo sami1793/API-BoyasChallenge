@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ar.com.ada.api.boyas.entities.Muestra;
 import ar.com.ada.api.boyas.models.request.MuestraInfo;
 import ar.com.ada.api.boyas.models.response.AnomaliaResponse;
+import ar.com.ada.api.boyas.models.response.BadResponse;
 import ar.com.ada.api.boyas.models.response.GenericResponse;
 import ar.com.ada.api.boyas.models.response.MuestraColor;
 import ar.com.ada.api.boyas.models.response.MuestraMinimaResponse;
@@ -26,7 +28,8 @@ public class MuestraController {
     @Autowired
     MuestraService service;
 
-    //Registra una muestra
+    //POST: Registra una muestra
+    //agregar validaciones!!!!
     @PostMapping("api/muestras")
     public ResponseEntity<MuestraResponse> registrarMuestra(@RequestBody MuestraInfo muestra){
         MuestraResponse respuestaMuestra = new MuestraResponse();
@@ -42,25 +45,27 @@ public class MuestraController {
         return ResponseEntity.ok(respuestaMuestra);
     }
 
-    //Reseteara el color de la luz de la boya a “AZUL” a partir de una muestra especifica
+    //DELETE: Resetea el color de la luz de la boya a “AZUL” a partir de una muestra especifica
     @DeleteMapping("api/muestras/{id}")
-    public ResponseEntity<GenericResponse> resetarColorBoyaMuestra(@PathVariable Integer id){
+    public ResponseEntity<?> resetarColorBoyaMuestra(@PathVariable Integer id){
         GenericResponse respuesta = new GenericResponse();
+        BadResponse badRespuesta= new BadResponse();
         if(service.resetearColorBoyaMuestra(id)){//reseteo y a la vez devuelvo true o false
+            respuesta.id=id;
             respuesta.isOk=true;
             respuesta.mensaje="Color de boya resetado a azul con éxito";
 
             return ResponseEntity.ok(respuesta);
         }
         else{
-            respuesta.isOk=false;
-            respuesta.mensaje="El id de muestra no existe";
-            return ResponseEntity.badRequest().body(respuesta);
+            badRespuesta.isOk=false;
+            badRespuesta.mensaje="El id de muestra no existe";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(badRespuesta);
         }    
 
     }
 
-    //devuelve la lista de muestras de una boya, indicado por "idBoya"
+    //GET: devuelve la lista de muestras de una boya, indicado por "idBoya"
     @GetMapping("api/muestras/boyas/{idBoya}")
     public ResponseEntity<?> traerMuestras(@PathVariable Integer idBoya){
         GenericResponse respuesta= new GenericResponse();
@@ -75,7 +80,8 @@ public class MuestraController {
                     
     }
 
-    //devuelve la lista de muestras de un color en el siguiente formato JSON MuestraColor:
+    //GET: devuelve la lista de muestras de un color en el siguiente formato JSON MuestraColor:
+    //Agregar validación de COLOR!!
     @GetMapping("api/muestras/colores/{color}")
     public ResponseEntity<List<MuestraColor>> traerMuestrasPorColor(@PathVariable String color){
                 

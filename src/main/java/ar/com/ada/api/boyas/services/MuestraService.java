@@ -33,9 +33,10 @@ public class MuestraService {
         muestra.setLatitud(latitud);
         muestra.setLongitud(longitud);
         muestra.setAlturaNivelMar(alturaNivelMar);
+        
 
-        //repo.save(muestra);
-        boyaService.guardarBoya(boya);
+        repo.save(muestra);
+        //boyaService.guardarBoya(boya);//si guardo así el muestra_id me da cero
         return muestra;
     }
 
