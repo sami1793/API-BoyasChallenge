@@ -15,12 +15,14 @@ public class BoyaService {
     @Autowired 
     BoyaRepository repo;
 
-    public void crearBoya(double longitudInstalacion, double latitudInstalacion) {
+    public Boya crearBoya(double longitudInstalacion, double latitudInstalacion) {
         Boya boya = new Boya();
         boya.setLongitudInstalacion(longitudInstalacion);
         boya.setLatitudInstalacion(latitudInstalacion);
 
         repo.save(boya);
+
+        return boya;
     }
 
     public List<Boya> obtenerBoyas() {
@@ -29,6 +31,13 @@ public class BoyaService {
 
     public Boya buscarBoya(Integer boyaId) {
         return repo.findByboyaId(boyaId);
+    }
+
+    public boolean existeBoya(Integer boyaId){
+        if(buscarBoya(boyaId)!=null)
+            return true;
+        else
+            return false;
     }
 
     public void guardarBoya(Boya boya){

@@ -57,7 +57,7 @@ public class MuestraController {
             respuesta.mensaje="El id de muestra no existe";
             return ResponseEntity.badRequest().body(respuesta);
         }    
-                
+
     }
 
     //devuelve la lista de muestras de una boya, indicado por "idBoya"
@@ -79,7 +79,7 @@ public class MuestraController {
     @GetMapping("api/muestras/colores/{color}")
     public ResponseEntity<List<MuestraColor>> traerMuestrasPorColor(@PathVariable String color){
                 
-        return ResponseEntity.ok(service.traerMuestrasPorColor(color));
+        return ResponseEntity.ok(service.traerMuestrasPorColor(color.toUpperCase()));//por si se ingresa en minuscula
     }
 
     //que devuelva la muestra donde la altura nivel del mar sea la minima 
